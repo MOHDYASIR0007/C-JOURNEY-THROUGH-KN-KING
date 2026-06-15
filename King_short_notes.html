@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K.N. King — C Programming Notes | Ch 1–27</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222636;
+    --border: #2e3250;
+    --text: #e2e8f0;
+    --muted: #8892b0;
+    --concept: #4a9eed;
+    --syntax: #22c55e;
+    --pitfall: #ef4444;
+    --keyword: #f59e0b;
+    --concept-bg: #0d2137;
+    --syntax-bg: #0a2218;
+    --pitfall-bg: #2a0d0d;
+    --keyword-bg: #2a1d00;
+    --ch-header: #8b5cf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .top-bar {
+    background: linear-gradient(135deg, #1a1d27, #0f1117);
+    border-bottom: 2px solid var(--ch-header);
+    padding: 18px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .top-bar h1 { font-size: 17px; color: #c4b5fd; font-weight: 700; }
+  .top-bar span { font-size: 12px; color: var(--muted); }
+  .nav-pills { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 28px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .nav-pills a {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+  .nav-pills a:hover { background: var(--ch-header); color: white; border-color: var(--ch-header); }
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px 28px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; }
+  .chapter-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    break-inside: avoid;
+  }
+  .chapter-header {
+    background: linear-gradient(135deg, #2d1b69, #1e1040);
+    border-bottom: 2px solid var(--ch-header);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ch-num {
+    background: var(--ch-header);
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .chapter-header h2 { font-size: 13px; color: #c4b5fd; font-weight: 700; }
+  .section { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .label-concept { background: var(--concept-bg); color: var(--concept); border: 1px solid var(--concept); }
+  .label-syntax  { background: var(--syntax-bg);  color: var(--syntax);  border: 1px solid var(--syntax); }
+  .label-pitfall { background: var(--pitfall-bg); color: var(--pitfall); border: 1px solid var(--pitfall); }
+  .label-keyword { background: var(--keyword-bg); color: var(--keyword); border: 1px solid var(--keyword); }
+  .section-title { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 5px; }
+  ul { list-style: none; padding: 0; }
+  ul li {
+    padding: 2px 0 2px 14px;
+    position: relative;
+    color: var(--text);
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  ul li:last-child { border-bottom: none; }
+  ul li::before { content: '›'; position: absolute; left: 2px; color: var(--muted); }
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.06);
+    padding: 0 4px;
+    border-radius: 3px;
+    color: #93c5fd;
+  }
+  .master-ref { margin-top: 20px; }
+  .master-ref .chapter-header { background: linear-gradient(135deg, #450a0a, #1f0000); border-color: var(--pitfall); }
+  .master-ref .ch-num { background: var(--pitfall); }
+  .master-ref h2 { color: #fca5a5; }
+  .master-ref-keyword .chapter-header { background: linear-gradient(135deg, #451a03, #1a0d00); border-color: var(--keyword); }
+  .master-ref-keyword .ch-num { background: var(--keyword); }
+  .master-ref-keyword h2 { color: #fde68a; }
+  .section-group-title {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    padding: 12px 0 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>K.N. King — C Programming: A Modern Approach (2nd Ed.)</h1>
+    <span>Complete Short Notes · Chapters 1–27 · C89 / C99 · Every section, no skips</span>
+  </div>
+</div>
+
+<div class="nav-pills">
+  <a href="#ch1">Ch1</a><a href="#ch2">Ch2</a><a href="#ch3">Ch3</a><a href="#ch4">Ch4</a>
+  <a href="#ch5">Ch5</a><a href="#ch6">Ch6</a><a href="#ch7">Ch7</a><a href="#ch8">Ch8</a>
+  <a href="#ch9">Ch9</a><a href="#ch10">Ch10</a><a href="#ch11">Ch11</a><a href="#ch12">Ch12</a>
+  <a href="#ch13">Ch13</a><a href="#ch14">Ch14</a><a href="#ch15">Ch15</a><a href="#ch16">Ch16</a>
+  <a href="#ch17">Ch17</a><a href="#ch18">Ch18</a><a href="#ch19">Ch19</a><a href="#ch20">Ch20</a>
+  <a href="#ch21">Ch21</a><a href="#ch22">Ch22</a><a href="#ch23">Ch23</a><a href="#ch24">Ch24</a>
+  <a href="#ch25">Ch25</a><a href="#ch26">Ch26</a><a href="#ch27">Ch27</a>
+  <a href="#ref-prec">Precedence</a><a href="#ref-ub">UB Catalog</a><a href="#ref-diff">C89 vs C99</a>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-group-title">Foundations — Ch 1–8</div>
+<div class="grid">
+
+<!-- CH1 -->
+<div class="chapter-block" id="ch1">
+  <div class="chapter-header"><span class="ch-num">CH 1</span><h2>Introducing C</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">History</div>
+    <ul>
+      <li>Bell Labs, early 1970s: UNIX rewrite need</li>
+      <li>Thompson → B language → Dennis Ritchie → C</li>
+      <li>K&R C: 1978 original book standard</li>
+      <li>C89/ANSI: first official ISO standard</li>
+      <li>C99: major evolution with new features</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">C Strengths</div>
+    <ul>
+      <li>Efficiency: compiles to tight machine code</li>
+      <li>Portability: runs on any hardware</li>
+      <li>Low-level: direct memory/hardware access</li>
+      <li>Small core: compact, few keywords</li>
+      <li>Foundation: basis of C++, Java, Python</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">C Weaknesses</div>
+    <ul>
+      <li>No type safety: compiler rarely enforces</li>
+      <li>No bounds checking: arrays silently overrun</li>
+      <li>Undefined behavior: legal code can explode</li>
+      <li>Pointer errors: hardest class of bugs</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Using C Effectively</div>
+    <ul>
+      <li>Adopt: consistent coding conventions</li>
+      <li>Avoid: overly clever tricks</li>
+      <li>Stick: to standard C89/C99 only</li>
+      <li>Use: standard library for common tasks</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH2 -->
+<div class="chapter-block" id="ch2">
+  <div class="chapter-header"><span class="ch-num">CH 2</span><h2>C Fundamentals</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Minimal Program Form</div>
+    <ul>
+      <li>directives → <code>int main(void)</code> → <code>{ statements }</code></li>
+      <li><code>#include &lt;stdio.h&gt;</code>: include I/O header</li>
+      <li><code>int main(void)</code>: mandatory entry function</li>
+      <li><code>return 0</code>: signals success to OS</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Compilation Pipeline</div>
+    <ul>
+      <li>Step 1 Preprocessing: handles # lines</li>
+      <li>Step 2 Compiling: source → object code</li>
+      <li>Step 3 Linking: object + libs → executable</li>
+      <li><code>gcc -o pun pun.c</code>: compile and link together</li>
+      <li><code>cc pun.c</code>: UNIX traditional compiler command</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Directives</div>
+    <ul>
+      <li><code>#include &lt;stdio.h&gt;</code>: include standard I/O</li>
+      <li>Directives: start with #, one line, no semicolon</li>
+      <li>Headers: declare library functions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Variables &amp; Constants</div>
+    <ul>
+      <li><code>int height</code>: declares integer variable</li>
+      <li><code>float profit</code>: declares float variable</li>
+      <li><code>int i = 0</code>: declaration with initialization</li>
+      <li><code>#define LIMIT 100</code>: named constant macro</li>
+      <li>No #define semicolon: it is not a statement</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">printf &amp; scanf</div>
+    <ul>
+      <li><code>printf("fmt", args)</code>: formatted output</li>
+      <li><code>scanf("fmt", &amp;var)</code>: formatted input</li>
+      <li><code>&amp;</code>: address-of — required in scanf for scalars</li>
+      <li><code>%d</code>: integer; <code>%f</code>: float in format strings</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Comments</div>
+    <ul>
+      <li><code>/* ... */</code>: C89 block comment</li>
+      <li><code>// ...</code>: C99 single-line comment</li>
+      <li>Cannot nest <code>/* */</code> comments</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Critical Bugs</div>
+    <ul>
+      <li>Missing &amp; in scanf: writes to random address</li>
+      <li>Unterminated /* comment: swallows code</li>
+      <li>main ≠ MAIN or begin: program won't run</li>
+      <li>Mismatched format specifiers: garbage output</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Identifiers</div>
+    <ul>
+      <li>Letters, digits, underscore only</li>
+      <li>First character: must NOT be digit</li>
+      <li>Case-sensitive: Height ≠ height ≠ HEIGHT</li>
+      <li>C89 significant: first 31 chars; C99: 63 chars</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Program Layout Rules</div>
+    <ul>
+      <li>Statements: end with semicolon</li>
+      <li>Compound stmt: uses <code>{ }</code> not semicolon</li>
+      <li>Whitespace: ignored between tokens</li>
+      <li>One statement per line: recommended style</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH3 -->
+<div class="chapter-block" id="ch3">
+  <div class="chapter-header"><span class="ch-num">CH 3</span><h2>Formatted I/O</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">printf Conversion Specifiers</div>
+    <ul>
+      <li><code>%d</code> or <code>%i</code>: signed decimal int</li>
+      <li><code>%u</code>: unsigned decimal int</li>
+      <li><code>%o</code>: unsigned octal</li>
+      <li><code>%x / %X</code>: hex lowercase/uppercase</li>
+      <li><code>%f</code>: fixed decimal float (6 places default)</li>
+      <li><code>%e / %E</code>: scientific notation</li>
+      <li><code>%g / %G</code>: shorter of %e or %f</li>
+      <li><code>%c</code>: single character</li>
+      <li><code>%s</code>: string (until \0)</li>
+      <li><code>%%</code>: literal % sign</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">printf Flags &amp; Width</div>
+    <ul>
+      <li><code>%10d</code>: right-justify in field of 10</li>
+      <li><code>%-10d</code>: left-justify in field of 10</li>
+      <li><code>%010d</code>: zero-pad to width 10</li>
+      <li><code>%+d</code>: always show + or - sign</li>
+      <li><code>%.4f</code>: 4 decimal places</li>
+      <li><code>%8.2f</code>: width 8, precision 2</li>
+      <li><code>%*d</code>: width from next argument</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">scanf Conversion Specifiers</div>
+    <ul>
+      <li><code>%d</code>: reads int (decimal)</li>
+      <li><code>%f</code>: reads float</li>
+      <li><code>%lf</code>: reads double — l modifier required</li>
+      <li><code>%c</code>: reads one char including whitespace</li>
+      <li><code>%s</code>: reads word stops at whitespace</li>
+      <li><code>%[...]</code>: reads matching char set (C89)</li>
+      <li>&amp; required: for all scalar variables</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Escape Sequences</div>
+    <ul>
+      <li><code>\n</code>: newline &nbsp;<code>\t</code>: tab &nbsp;<code>\r</code>: carriage return</li>
+      <li><code>\b</code>: backspace &nbsp;<code>\a</code>: alert/bell</li>
+      <li><code>\\</code>: literal backslash &nbsp;<code>\"</code>: double quote</li>
+      <li><code>\'</code>: single quote &nbsp;<code>\0</code>: null char (value 0)</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">printf/scanf Traps</div>
+    <ul>
+      <li>Extra %d in printf: reads garbage off stack</li>
+      <li>Missing &amp; in scanf: overwrites random memory</li>
+      <li>%f for double in scanf: WRONG — use %lf</li>
+      <li>scanf("%c"): reads leftover \n from buffer</li>
+      <li>Mismatch count vs format: undefined behavior</li>
+      <li>printf("%s", NULL): crash — null ptr</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH4 -->
+<div class="chapter-block" id="ch4">
+  <div class="chapter-header"><span class="ch-num">CH 4</span><h2>Expressions</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Arithmetic Operators</div>
+    <ul>
+      <li><code>+</code>: unary plus or binary addition</li>
+      <li><code>-</code>: unary minus or binary subtraction</li>
+      <li><code>*</code>: multiplication</li>
+      <li><code>/</code>: division — truncates for int operands</li>
+      <li><code>%</code>: remainder — int operands only</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Division Behavior</div>
+    <ul>
+      <li>7 / 2 = 3: fractional part silently dropped</li>
+      <li>C89: -9/7 can be -1 or -2 (impl-defined)</li>
+      <li>C99: -9/7 = -1 always (truncates toward zero)</li>
+      <li>10 % 3 = 1: remainder sign = dividend sign in C99</li>
+      <li>i / 0: undefined behavior — not just an error</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Operator Precedence</div>
+    <ul>
+      <li>Highest: unary + -</li>
+      <li>Next: * / %</li>
+      <li>Lowest binary: + -</li>
+      <li>Left associative: all binary arithmetic ops</li>
+      <li>Use parentheses liberally when unsure</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Assignment Operators</div>
+    <ul>
+      <li><code>i = 5</code>: simple assignment (right-to-left)</li>
+      <li><code>i += 2</code> / <code>-=</code> / <code>*=</code> / <code>/=</code> / <code>%=</code></li>
+      <li>Assignment is expression: <code>v = e</code> has value e</li>
+      <li>Chaining: <code>i = j = k = 0</code>: all set to 0</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Increment &amp; Decrement</div>
+    <ul>
+      <li><code>i++</code>: post-increment — use i then add 1</li>
+      <li><code>++i</code>: pre-increment — add 1 then use i</li>
+      <li><code>i--</code>: post-decrement &nbsp;<code>--i</code>: pre-decrement</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Lvalues &amp; Expression Statements</div>
+    <ul>
+      <li>Lvalue: expression designating object in memory</li>
+      <li>Variable i: is an lvalue; <code>i + j</code>: NOT an lvalue</li>
+      <li>Any expression + semicolon = statement</li>
+      <li>Side effects: assignment, inc/dec, function calls</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Expression Traps</div>
+    <ul>
+      <li><code>i / 0</code> or <code>i % 0</code>: undefined behavior</li>
+      <li><code>a[i] = i++</code>: order of evaluation undefined</li>
+      <li><code>i++ * i++</code>: two unsequenced side effects — UB</li>
+      <li>C89 impl-defined: -9/7 truncation direction</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH5 -->
+<div class="chapter-block" id="ch5">
+  <div class="chapter-header"><span class="ch-num">CH 5</span><h2>Selection Statements</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Relational &amp; Equality Operators</div>
+    <ul>
+      <li><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code> <code>==</code> <code>!=</code></li>
+      <li>Returns: 0 (false) or 1 (true) — always int</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Logical Operators</div>
+    <ul>
+      <li><code>&amp;&amp;</code>: logical AND — short-circuit left to right</li>
+      <li><code>||</code>: logical OR — short-circuit left to right</li>
+      <li><code>!</code>: logical NOT</li>
+      <li>Short-circuit: right side not eval if decided</li>
+      <li>!expr: 0 if expr nonzero; 1 if expr zero</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">if Statement</div>
+    <ul>
+      <li><code>if (expr) statement</code></li>
+      <li><code>if (expr) statement else statement</code></li>
+      <li>Cascaded if/else if/.../else chain</li>
+      <li>else: matches nearest unmatched if</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Conditional Expression</div>
+    <ul>
+      <li><code>expr1 ? expr2 : expr3</code></li>
+      <li>Evaluates expr2 if expr1 nonzero, else expr3</li>
+      <li><code>i &gt; j ? i : j</code>: returns larger of i, j</li>
+      <li>Right-to-left associative</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">switch Statement</div>
+    <ul>
+      <li><code>switch (int-expr) { case c1: … default: … }</code></li>
+      <li>expr: must be integer type — not float or string</li>
+      <li>case values: must be integer constants</li>
+      <li>default: optional but recommended</li>
+      <li><code>break</code>: required to stop fall-through</li>
+      <li>Fall-through: intentional only — comment it</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">C Boolean Values</div>
+    <ul>
+      <li>Zero = false; any nonzero = true</li>
+      <li>C89: no boolean type — use int</li>
+      <li>C99: <code>_Bool</code> type — stores only 0 or 1</li>
+      <li>C99: <code>#include &lt;stdbool.h&gt;</code> gives bool/true/false</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Selection Traps</div>
+    <ul>
+      <li><code>if (i = 0)</code>: assignment not comparison!</li>
+      <li>Dangling else: else binds to nearest if</li>
+      <li>if without braces: only one statement controlled</li>
+      <li><code>i &lt; j &lt; k</code>: means (i&lt;j)&lt;k NOT range check</li>
+      <li>Missing break: falls into next case silently</li>
+      <li>No ranges in cases: case 1..5: is illegal</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH6 -->
+<div class="chapter-block" id="ch6">
+  <div class="chapter-header"><span class="ch-num">CH 6</span><h2>Loops</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">while Loop</div>
+    <ul>
+      <li><code>while (expr) statement</code></li>
+      <li>Tests condition BEFORE each iteration</li>
+      <li>If false initially: body never executes</li>
+      <li><code>while (1)</code>: infinite loop idiom</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">do-while Loop</div>
+    <ul>
+      <li><code>do statement while (expr);</code></li>
+      <li>Tests condition AFTER body executes</li>
+      <li>Body always executes at least once</li>
+      <li>Semicolon after ) is REQUIRED</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">for Loop</div>
+    <ul>
+      <li><code>for (init; test; update) statement</code></li>
+      <li>init: executes once before loop</li>
+      <li>test: checked before each iteration</li>
+      <li>update: executes after each iteration</li>
+      <li><code>for (;;)</code>: all parts optional — infinite loop</li>
+      <li>C99: <code>int i = 0</code> allowed in init expr</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Comma Operator &amp; Exit Statements</div>
+    <ul>
+      <li><code>expr1, expr2</code>: evaluates both; value = expr2</li>
+      <li>Lowest precedence; primary use: for loop init/update</li>
+      <li><code>for (i=0, j=n-1; i&lt;j; i++, j--)</code>: example</li>
+      <li><code>break</code>: exits innermost loop or switch only</li>
+      <li><code>continue</code>: skips to next iteration of loop</li>
+      <li><code>goto label</code>: avoid except for deeply nested breaks</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Null Statement</div>
+    <ul>
+      <li><code>;</code>: does nothing — valid statement</li>
+      <li><code>while (getchar() != '\n') ;</code>: read to newline</li>
+      <li>Stray <code>;</code>: <code>if (i &gt; 0);</code> then next stmt always runs</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Loop Traps</div>
+    <ul>
+      <li>Off-by-one: fencepost error in bounds</li>
+      <li>Stray semicolon: <code>for (...);</code> empty body</li>
+      <li>Float loop counter: precision drift accumulates</li>
+      <li>Modifying loop variable inside body: confusing</li>
+      <li>Infinite loop: wrong condition or missing update</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH7 -->
+<div class="chapter-block" id="ch7">
+  <div class="chapter-header"><span class="ch-num">CH 7</span><h2>Basic Types</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Integer Types C89</div>
+    <ul>
+      <li><code>short int</code>: ≥16 bits, signed</li>
+      <li><code>int</code>: ≥16 bits (usually 32 on modern CPUs)</li>
+      <li><code>long int</code>: ≥32 bits, signed</li>
+      <li>unsigned versions available for all</li>
+      <li>"int" keyword can be omitted in compound names</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Integer Types C99 Additions</div>
+    <ul>
+      <li><code>long long int</code>: ≥64 bits signed</li>
+      <li><code>unsigned long long int</code>: ≥64 bits</li>
+      <li><code>_Bool</code>: holds only 0 or 1</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Integer Constants</div>
+    <ul>
+      <li><code>255</code>: decimal &nbsp;<code>0377</code>: octal (leading 0) &nbsp;<code>0xFF</code>: hex</li>
+      <li><code>255L</code>: long &nbsp;<code>255U</code>: unsigned &nbsp;<code>255LL</code>: long long (C99)</li>
+      <li><code>255ULL</code>: unsigned long long (C99)</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Floating-Point Types</div>
+    <ul>
+      <li><code>float</code>: ~6-7 sig digits &nbsp;<code>3.14f</code>: float literal</li>
+      <li><code>double</code>: ~15-16 sig digits &nbsp;<code>3.14</code>: double (default)</li>
+      <li><code>long double</code>: extended precision &nbsp;<code>3.14L</code>: literal</li>
+      <li><code>1e10</code>: scientific notation double</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">char Type</div>
+    <ul>
+      <li><code>char</code>: stores one character — 1 byte</li>
+      <li><code>'a'</code>: character constant in single quotes</li>
+      <li><code>char c = 'A'</code>: stores ASCII value 65</li>
+      <li>signed char vs unsigned char: impl-defined</li>
+      <li>unsigned char: use for raw byte manipulation</li>
+      <li>char arithmetic: chars are small integers</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Type Conversions</div>
+    <ul>
+      <li>Implicit: int + float → float result</li>
+      <li>Usual arithmetic: both operands promoted to wider type</li>
+      <li><code>(float) i</code>: explicit cast to float</li>
+      <li><code>(int) 3.9</code>: truncates to 3 — not rounds</li>
+      <li>char to int: sign extension if signed char</li>
+      <li>Narrowing: possible data loss — no warning by default</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">typedef &amp; sizeof</div>
+    <ul>
+      <li><code>typedef int Bool</code>: alias Bool for int</li>
+      <li><code>typedef unsigned char Byte</code>: alias for byte</li>
+      <li>typedef: improves portability — not a new type</li>
+      <li><code>sizeof(int)</code>: bytes of type &nbsp;<code>sizeof(x)</code>: bytes of var</li>
+      <li>Returns: <code>size_t</code> — an unsigned type</li>
+      <li><code>sizeof array</code>: total bytes of entire array</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Type Traps</div>
+    <ul>
+      <li>char signedness: varies — specify signed/unsigned</li>
+      <li>Signed integer overflow: undefined behavior</li>
+      <li>%f for double in scanf: WRONG — use %lf</li>
+      <li>Implicit narrowing cast: data loss silently</li>
+      <li>sizeof gives pointer size after array decay</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH8 -->
+<div class="chapter-block" id="ch8">
+  <div class="chapter-header"><span class="ch-num">CH 8</span><h2>Arrays</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">1D Array Declaration</div>
+    <ul>
+      <li><code>int a[10]</code>: array of 10 ints — indices 0 to 9</li>
+      <li><code>int a[5] = {1,2,3,4,5}</code>: full initializer</li>
+      <li><code>int a[] = {1,2,3}</code>: compiler infers size 3</li>
+      <li><code>int a[5] = {0}</code>: all elements zero</li>
+      <li><code>int a[5] = {1}</code>: only a[0]=1, rest 0</li>
+      <li>C99: <code>int a[5] = {[2]=3}</code>: designated init</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Array Storage</div>
+    <ul>
+      <li>Elements stored contiguously in memory</li>
+      <li>No runtime bounds checking — ever</li>
+      <li>Out of bounds: undefined behavior (silent)</li>
+      <li><code>sizeof(a)/sizeof(a[0])</code>: portable element count</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Multidimensional Arrays</div>
+    <ul>
+      <li><code>int m[3][4]</code>: 3 rows × 4 cols = 12 elements</li>
+      <li><code>m[i][j]</code>: row i, column j — zero-indexed</li>
+      <li><code>int m[2][3] = {{1,2,3},{4,5,6}}</code>: 2D init</li>
+      <li>Stored: row-major order (row 0, row 1, ...)</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">VLA — Variable Length Arrays (C99)</div>
+    <ul>
+      <li><code>int a[n]</code>: n can be runtime variable</li>
+      <li>VLA: allocated on stack not heap</li>
+      <li>VLA: cannot have initializer</li>
+      <li>VLA: size fixed at point of creation</li>
+      <li>VLA: not allowed at file scope — only inside functions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Array Traps</div>
+    <ul>
+      <li><code>a[10]</code> for <code>int a[10]</code>: one past end — UB</li>
+      <li>No array assignment: <code>a = b</code> is illegal</li>
+      <li>Array name decays: a becomes &amp;a[0] pointer</li>
+      <li>sizeof after decay: gives pointer size not array</li>
+      <li>Nested VLA: C99 only, no C89 support</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end grid foundations -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-group-title" style="margin-top:24px">Functions &amp; Pointers — Ch 9–13</div>
+<div class="grid">
+
+<!-- CH9 -->
+<div class="chapter-block" id="ch9">
+  <div class="chapter-header"><span class="ch-num">CH 9</span><h2>Functions</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Function Definition</div>
+    <ul>
+      <li><code>return-type name(params) { body }</code></li>
+      <li><code>int add(int a, int b) { return a+b; }</code></li>
+      <li><code>void f(void)</code>: no args, no return value</li>
+      <li><code>return expr</code>: exits and returns value</li>
+      <li><code>return;</code>: exits void function early</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Function Prototype / Declaration</div>
+    <ul>
+      <li><code>int add(int, int);</code>: prototype before use</li>
+      <li>Prototype: tells compiler argument and return types</li>
+      <li>C99 requires prototype before call</li>
+      <li>C89 allows implicit int: dangerous, avoid</li>
+      <li>Header files: collect prototypes for sharing</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Argument Passing</div>
+    <ul>
+      <li>C: call by value — all args are copies</li>
+      <li>Function cannot modify caller's original variable</li>
+      <li>To modify caller's var: pass pointer</li>
+      <li>Arrays: decay to pointer — modified in caller</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">return Statement</div>
+    <ul>
+      <li><code>return 0</code>: main → success</li>
+      <li><code>return nonzero</code>: main → failure signal</li>
+      <li>C99: falling off end of main = return 0</li>
+      <li>C89: falling off main = undefined return value</li>
+      <li>No return in non-void: returns garbage</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Recursion</div>
+    <ul>
+      <li>Function calls itself directly or indirectly</li>
+      <li>Must have: base case to terminate</li>
+      <li>Stack frame: added per recursive call</li>
+      <li>Deep recursion: stack overflow risk</li>
+      <li>Tail recursion: compiler may optimize</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Function Traps</div>
+    <ul>
+      <li>Missing prototype C89: args passed as int</li>
+      <li>Return local variable address: dangling ptr</li>
+      <li>No return in non-void: UB — compiler may warn</li>
+      <li>Recursion no base case: infinite stack overflow</li>
+      <li>K&amp;R style params: outdated, avoid in new code</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH10 -->
+<div class="chapter-block" id="ch10">
+  <div class="chapter-header"><span class="ch-num">CH 10</span><h2>Program Organization</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Local Variables</div>
+    <ul>
+      <li>Declared inside function body or block</li>
+      <li>Automatic storage duration: born on call, dies on return</li>
+      <li>Block scope: visible from declaration to end of block</li>
+      <li>C99: declare anywhere in block</li>
+      <li>C89: declare only at start of block</li>
+      <li>Parameters: same properties as local variables</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Static Local Variables</div>
+    <ul>
+      <li><code>static int count</code>: persists across function calls</li>
+      <li>Initialized once: at program start</li>
+      <li>Block scope: still only visible in function</li>
+      <li>Use: maintaining state between calls</li>
+      <li>Not thread-safe: one copy shared by all calls</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">External (Global) Variables</div>
+    <ul>
+      <li>Declared outside all functions</li>
+      <li>Static storage duration: live for program life</li>
+      <li>File scope: visible from declaration to file end</li>
+      <li>Accessible by all functions after its declaration</li>
+      <li>Initialized to zero automatically</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Linkage</div>
+    <ul>
+      <li>External linkage: visible across multiple files</li>
+      <li>Internal linkage: static global — file-private</li>
+      <li>No linkage: local variables</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Canonical C Program Order</div>
+    <ul>
+      <li>1st: #include directives</li>
+      <li>2nd: #define macros</li>
+      <li>3rd: type definitions</li>
+      <li>4th: external variable declarations</li>
+      <li>5th: function prototypes except main</li>
+      <li>6th: definition of main</li>
+      <li>7th: definitions of other functions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Scope Traps</div>
+    <ul>
+      <li>Global variable: any function can corrupt it</li>
+      <li>Local shadows global: same name hides outer</li>
+      <li>No extern in definition: linking confusion</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH11 -->
+<div class="chapter-block" id="ch11">
+  <div class="chapter-header"><span class="ch-num">CH 11</span><h2>Pointers</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Memory Model</div>
+    <ul>
+      <li>Memory: sequence of bytes each with unique address</li>
+      <li>Variable: occupies one or more consecutive bytes</li>
+      <li>Address: location of first byte of variable</li>
+      <li>Pointer variable: a variable that stores an address</li>
+      <li><code>int *p</code>: p can store address of any int</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Address &amp; Indirection Operators</div>
+    <ul>
+      <li><code>&amp;i</code>: address-of — gives address of variable i</li>
+      <li><code>*p</code>: indirection — value at address in p</li>
+      <li><code>p = &amp;i</code>: p now points to i</li>
+      <li><code>*p = 5</code>: writes 5 into i through p</li>
+      <li><code>int *p, *q</code>: both p and q are pointers</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Pointer Declaration Types</div>
+    <ul>
+      <li><code>int *p</code> &nbsp;<code>double *q</code> &nbsp;<code>char *r</code></li>
+      <li><code>void *v</code>: pointer to any type (generic)</li>
+      <li><code>NULL</code>: null pointer constant (0 or (void*)0)</li>
+      <li>Always initialize pointer before use</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointers as Function Args</div>
+    <ul>
+      <li><code>void inc(int *p) { (*p)++; }</code></li>
+      <li><code>inc(&amp;i)</code>: passes address of i to function</li>
+      <li><code>(*p)++</code>: parentheses required here</li>
+      <li><code>*p++</code>: increments pointer p, not *p</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Returning Pointers</div>
+    <ul>
+      <li><code>int *max(int *a, int *b)</code></li>
+      <li>NEVER return address of local variable</li>
+      <li>Return static or heap-allocated: safe</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Pointer Traps</div>
+    <ul>
+      <li>Uninitialized pointer: points to random memory</li>
+      <li>NULL dereference: *p when p==NULL → crash</li>
+      <li>Dangling pointer: points to freed/out-of-scope</li>
+      <li><code>*p++ vs (*p)++</code>: entirely different operations</li>
+      <li>Aliasing: two ptrs modify same object unexpectedly</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH12 -->
+<div class="chapter-block" id="ch12">
+  <div class="chapter-header"><span class="ch-num">CH 12</span><h2>Pointers and Arrays</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Array Decay Rule</div>
+    <ul>
+      <li>Array name → pointer to first element</li>
+      <li><code>int a[10]; int *p = a</code>: same as <code>p = &amp;a[0]</code></li>
+      <li>WHY: C designed for fast array traversal</li>
+      <li>Exception: sizeof(a) gives full array bytes</li>
+      <li>Exception: &amp;a gives pointer to whole array</li>
+      <li>Exception: string literal assignment</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointer Arithmetic — Three Forms Only</div>
+    <ul>
+      <li><code>p + j</code>: pointer to element j beyond p</li>
+      <li><code>p - j</code>: pointer to element j before p</li>
+      <li><code>p - q</code>: number of elements between p and q</li>
+      <li><code>p + 1</code>: moves sizeof(*p) bytes forward</li>
+      <li><code>a[i] ≡ *(a+i)</code>: subscript = pointer arithmetic</li>
+      <li><code>i[a] ≡ *(i+a)</code>: also legal (rarely used)</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Array Name as Pointer</div>
+    <ul>
+      <li><code>*a = 7</code>: same as a[0] = 7</li>
+      <li><code>*(a+1) = 12</code>: same as a[1] = 12</li>
+      <li><code>for (p = a; p &lt; a+N; p++)</code>: pointer loop</li>
+      <li><code>a = p</code>: ILLEGAL — array name not assignable</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointers and 2D Arrays</div>
+    <ul>
+      <li><code>int a[R][C]</code>: stored row-major in memory</li>
+      <li><code>p = &amp;a[0][0]</code>: pointer to flattened array</li>
+      <li><code>a[i]</code>: pointer to first element of row i</li>
+      <li><code>for (p=&amp;a[0][0]; p&lt;=&amp;a[R-1][C-1]; p++)</code></li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointers and VLAs (C99)</div>
+    <ul>
+      <li><code>int (*p)[n]</code>: pointer to VLA row of n ints</li>
+      <li><code>p = &amp;a[0]</code>: p points to first row</li>
+      <li><code>(*p)[i]</code>: element i of current row</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Pointer Arithmetic Traps</div>
+    <ul>
+      <li>p - q unrelated pointers: undefined behavior</li>
+      <li>Pointer past one-beyond-end: legal to form, never dereference</li>
+      <li><code>int *</code> vs <code>int (*)[N]</code>: very different types</li>
+      <li>Comparing pointers across arrays: UB</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH13 -->
+<div class="chapter-block" id="ch13">
+  <div class="chapter-header"><span class="ch-num">CH 13</span><h2>Strings</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">String Representation</div>
+    <ul>
+      <li>String: array of char terminated by '\0' (null)</li>
+      <li>'\0': null character, ASCII value 0</li>
+      <li>"hello": stored as h-e-l-l-o-'\0' = 6 bytes</li>
+      <li>String length: chars before '\0'</li>
+      <li>WHY null-terminated: no built-in string type in C</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">String Literals &amp; Variables</div>
+    <ul>
+      <li>Adjacent literals: "ab" "cd" = "abcd" (concatenated)</li>
+      <li>String literal: stored in read-only memory</li>
+      <li><code>char s[10]</code>: array to hold up to 9-char string</li>
+      <li><code>char s[] = "abc"</code>: compiler sizes it to 4</li>
+      <li><code>char *p = "abc"</code>: p points to read-only literal</li>
+      <li><code>p[0] = 'X'</code>: UB — literal is read-only</li>
+      <li><code>char s[] = "abc"; s[0]='X'</code>: OK — mutable copy</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">String I/O</div>
+    <ul>
+      <li><code>printf("%s", s)</code>: print until '\0'</li>
+      <li><code>scanf("%s", s)</code>: reads word — no &amp; needed</li>
+      <li><code>gets(s)</code>: reads line — DANGEROUS no bounds</li>
+      <li><code>fgets(s, n, stdin)</code>: safe bounded line read</li>
+      <li><code>puts(s)</code>: print string then newline</li>
+      <li><code>fputs(s, stdout)</code>: print string no newline</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">String Library &lt;string.h&gt;</div>
+    <ul>
+      <li><code>strlen(s)</code>: count chars before '\0'</li>
+      <li><code>strcpy(dst, src)</code>: copy src into dst</li>
+      <li><code>strncpy(dst, src, n)</code>: safe — max n chars</li>
+      <li><code>strcat(dst, src)</code>: append src onto dst</li>
+      <li><code>strncat(dst, src, n)</code>: safe bounded append</li>
+      <li><code>strcmp(s1, s2)</code>: 0=equal &lt;0=s1 less &gt;0=s1 greater</li>
+      <li><code>strncmp(s1, s2, n)</code>: compare first n chars</li>
+      <li><code>strchr(s, c)</code>: ptr to first c in s or NULL</li>
+      <li><code>strstr(s1, s2)</code>: ptr to first s2 in s1 or NULL</li>
+      <li><code>sprintf(buf, fmt, ...)</code>: print to string buffer</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Command-Line Args</div>
+    <ul>
+      <li><code>int main(int argc, char *argv[])</code>: with args</li>
+      <li>argc: count of command-line arguments</li>
+      <li>argv[0]: program name string</li>
+      <li>argv[1]: first user argument</li>
+      <li>argv[argc]: always NULL pointer</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">String Traps</div>
+    <ul>
+      <li>strcpy no size check: buffer overflow</li>
+      <li>gets: never use — removed in C11</li>
+      <li>strcmp returns 0 for equal: NOT true/false</li>
+      <li>strlen returns size_t: unsigned subtraction trap</li>
+      <li><code>char *p = "abc"; p[0]='X'</code>: crash on many systems</li>
+      <li>Forget \0: functions read past array end</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end grid functions/pointers -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-group-title" style="margin-top:24px">Advanced Features — Ch 14–20</div>
+<div class="grid">
+
+<!-- CH14 -->
+<div class="chapter-block" id="ch14">
+  <div class="chapter-header"><span class="ch-num">CH 14</span><h2>The Preprocessor</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">How Preprocessor Works</div>
+    <ul>
+      <li>Runs BEFORE compilation: text substitution</li>
+      <li>Handles: all lines beginning with #</li>
+      <li>Does NOT understand C syntax or types</li>
+      <li>Output: transformed C source fed to compiler</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Object-Like Macros</div>
+    <ul>
+      <li><code>#define PI 3.14159</code>: constant substitution</li>
+      <li><code>#define STR "hello"</code>: string constant</li>
+      <li><code>#undef PI</code>: remove macro definition</li>
+      <li>No type checking: unlike const variables</li>
+      <li>Expands literally: watch precedence</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Function-Like Macros</div>
+    <ul>
+      <li><code>#define MAX(a,b) ((a)&gt;(b)?(a):(b))</code></li>
+      <li>MAX(x, y): expands inline — no function call</li>
+      <li>Parenthesize all params: prevents precedence bugs</li>
+      <li>Parenthesize whole body: same reason</li>
+      <li>WHY: SQ(a+b) → ((a+b)*(a+b)) not a+b*a+b</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Conditional Compilation</div>
+    <ul>
+      <li><code>#if expr</code> <code>#ifdef NAME</code> <code>#ifndef NAME</code></li>
+      <li><code>#elif expr</code> <code>#else</code> <code>#endif</code>: required to close</li>
+      <li>Header guard pattern: <code>#ifndef _H #define _H ... #endif</code></li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Predefined Macros</div>
+    <ul>
+      <li><code>__LINE__</code>: current source line number (int)</li>
+      <li><code>__FILE__</code>: current source filename (string)</li>
+      <li><code>__DATE__</code>: compilation date (string)</li>
+      <li><code>__TIME__</code>: compilation time (string)</li>
+      <li><code>__STDC__</code>: 1 if standard conforming compiler</li>
+      <li><code>__STDC_VERSION__</code>: C99 = 199901L</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Other Directives</div>
+    <ul>
+      <li><code>#error "message"</code>: force compile error</li>
+      <li><code>#pragma</code>: implementation-specific instruction</li>
+      <li><code>#line n "file"</code>: reset line/file for diagnostics</li>
+      <li>Stringizing <code>#</code>: <code>#define STR(x) #x</code> → "x"</li>
+      <li>Token pasting <code>##</code>: join two tokens into one</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Macro Traps</div>
+    <ul>
+      <li>No parens in body: operator precedence bugs</li>
+      <li>Side effects in args: SQ(i++) expands i++ twice</li>
+      <li>Multi-statement macro: wrap in <code>do { } while(0)</code></li>
+      <li>Macro hides types: no type checking ever</li>
+      <li>Macro vs inline: C99 inline functions are safer</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH15 -->
+<div class="chapter-block" id="ch15">
+  <div class="chapter-header"><span class="ch-num">CH 15</span><h2>Writing Large Programs</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Source Files</div>
+    <ul>
+      <li>.c files: contain function definitions and variables</li>
+      <li>One source file must contain main function</li>
+      <li>Each source file compiled separately</li>
+      <li>Then linked together into one executable</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Header Files</div>
+    <ul>
+      <li>.h files: shared information between source files</li>
+      <li><code>#include "myfile.h"</code>: include local header</li>
+      <li>Headers contain: prototypes, type defs, macros, extern</li>
+      <li>Headers do NOT contain: function definitions or storage</li>
+      <li>Header guards: prevent double-inclusion errors</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">extern Keyword</div>
+    <ul>
+      <li><code>extern int i</code>: declares i defined elsewhere</li>
+      <li>extern: does NOT allocate storage</li>
+      <li>Definition: <code>int i;</code> — allocates storage once</li>
+      <li>Declaration: <code>extern int i;</code> — in all other files</li>
+      <li>Mismatch: <code>extern long i;</code> vs <code>int i;</code> → undefined</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Module Strategy</div>
+    <ul>
+      <li>Each module: one .c file + one .h file</li>
+      <li>.h file: interface — what callers need</li>
+      <li>.c file: implementation — how it works</li>
+      <li>Caller: #includes the .h file only</li>
+      <li>Design goal: minimize what's in .h files</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Building Multi-File Programs</div>
+    <ul>
+      <li><code>gcc -o prog file1.c file2.c file3.c</code></li>
+      <li>Partial compile: <code>gcc -c file1.c</code> → file1.o</li>
+      <li>Link objects: <code>gcc -o prog file1.o file2.o</code></li>
+      <li>Make utility: automates rebuild on change</li>
+      <li><code>gcc -DDEBUG=1</code>: define macro on command line</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Multi-File Traps</div>
+    <ul>
+      <li>Define variable in header: multiple definition link error</li>
+      <li>No header guard: double-inclusion errors</li>
+      <li>Mismatch extern type vs definition: silent UB</li>
+      <li>Forget to recompile changed file: stale .o</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH16 -->
+<div class="chapter-block" id="ch16">
+  <div class="chapter-header"><span class="ch-num">CH 16</span><h2>Structures, Unions &amp; Enumerations</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Structure Basics</div>
+    <ul>
+      <li><code>struct date { int d; int m; int y; }</code>: tagged struct</li>
+      <li><code>struct date d1</code>: declares variable of tagged type</li>
+      <li><code>d1.day = 15</code>: dot operator accesses member</li>
+      <li><code>d1 = d2</code>: struct assignment copies ALL members</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Structure Initialization</div>
+    <ul>
+      <li><code>struct date d = {15, 6, 2025}</code>: positional init</li>
+      <li>C99: <code>struct date d = {.day=15, .month=6}</code>: designated</li>
+      <li>Missing members: initialized to zero</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Structures &amp; Functions</div>
+    <ul>
+      <li>Pass struct by value: entire copy made</li>
+      <li>Pass struct by pointer: <code>void f(struct date *p)</code></li>
+      <li><code>p-&gt;day</code>: arrow — dereferences and accesses member</li>
+      <li><code>(*p).day</code>: same as p-&gt;day</li>
+      <li>Return struct by value: copy returned</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Nested Structures &amp; typedef</div>
+    <ul>
+      <li><code>struct person { char name[40]; struct date dob; }</code></li>
+      <li><code>p.dob.year</code>: chain dot operators</li>
+      <li><code>struct date dates[10]</code>: arrays of structs</li>
+      <li><code>typedef struct { int x; int y; } Point;</code></li>
+      <li><code>Point p1</code>: no need to write struct Point</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Union</div>
+    <ul>
+      <li><code>union { int i; double d; float f; } u</code></li>
+      <li>All members: share same memory location</li>
+      <li>Only one member valid at a time</li>
+      <li>sizeof(union): size of largest member</li>
+      <li>Use: tagged union — store type along with value</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Enumeration</div>
+    <ul>
+      <li><code>enum { MON=0, TUE, WED, THU, FRI, SAT, SUN }</code></li>
+      <li><code>enum color { RED, GREEN, BLUE }</code>: named enum type</li>
+      <li>Values auto-increment from previous if unspecified</li>
+      <li>enum: more readable than bare #define integers</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Struct/Union Traps</div>
+    <ul>
+      <li>Padding: compiler adds bytes for alignment</li>
+      <li>sizeof(struct) ≠ sum of members: always use sizeof</li>
+      <li>Union: writing one member, reading another is UB in C89</li>
+      <li>Large structs by value: expensive copy — use pointer</li>
+      <li>Designated init: C99 only — not C89</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH17 -->
+<div class="chapter-block" id="ch17">
+  <div class="chapter-header"><span class="ch-num">CH 17</span><h2>Advanced Uses of Pointers</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Dynamic Memory Allocation</div>
+    <ul>
+      <li><code>malloc(n)</code>: allocate n bytes, return void*</li>
+      <li><code>calloc(n, size)</code>: allocate n×size bytes, zeroed</li>
+      <li><code>realloc(p, n)</code>: resize block pointed to by p</li>
+      <li><code>free(p)</code>: release malloc/calloc/realloc block</li>
+      <li><code>#include &lt;stdlib.h&gt;</code>: required for all above</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">malloc Pattern</div>
+    <ul>
+      <li><code>int *a = malloc(n * sizeof(int))</code></li>
+      <li>ALWAYS check: <code>if (a == NULL) handle error</code></li>
+      <li>WHY: malloc returns NULL on out-of-memory</li>
+      <li>Every malloc: must have exactly one matching free</li>
+      <li>void *: automatically converts to any pointer type</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Linked Lists</div>
+    <ul>
+      <li><code>struct node { int val; struct node *next; }</code></li>
+      <li>next = NULL: marks end of list</li>
+      <li>head pointer: entry point to list</li>
+      <li>Insert at front: <code>new-&gt;next = head; head = new</code></li>
+      <li>Traverse: <code>for (p=head; p!=NULL; p=p-&gt;next)</code></li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointers to Pointers</div>
+    <ul>
+      <li><code>int **p</code>: pointer to pointer to int</li>
+      <li><code>**p</code>: double dereference</li>
+      <li><code>char **argv</code>: array of string pointers</li>
+      <li><code>void f(int **pp)</code>: modify pointer in caller</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Pointers to Functions</div>
+    <ul>
+      <li><code>int (*pf)(int)</code>: pointer to function taking/returning int</li>
+      <li><code>pf = func</code>: assign function to pointer</li>
+      <li><code>(*pf)(5)</code> or <code>pf(5)</code>: both valid call syntaxes</li>
+      <li>qsort comparator: <code>int cmp(const void*, const void*)</code></li>
+      <li>Use: callbacks, dispatch tables, strategy pattern</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Flexible Array Members (C99)</div>
+    <ul>
+      <li><code>struct s { int n; int a[]; }</code>: trailing flexible array</li>
+      <li>sizeof(struct s): does NOT include a</li>
+      <li><code>malloc(sizeof(struct s) + N*sizeof(int))</code></li>
+      <li><code>s-&gt;a[i]</code>: works via pointer arithmetic</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Dynamic Memory Traps</div>
+    <ul>
+      <li>Memory leak: malloc without matching free</li>
+      <li>Double free: undefined behavior — heap corruption</li>
+      <li>Use after free: dangling pointer — UB</li>
+      <li>Off-by-one malloc size: buffer overflow</li>
+      <li>Not checking NULL: immediate crash on use</li>
+      <li>realloc on NULL: behaves like malloc</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH18 -->
+<div class="chapter-block" id="ch18">
+  <div class="chapter-header"><span class="ch-num">CH 18</span><h2>Declarations</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Storage Class Specifiers</div>
+    <ul>
+      <li><code>auto</code>: default local — stack allocated (implicit)</li>
+      <li><code>static</code> local: persists, initialized once</li>
+      <li><code>static</code> file-level: internal linkage — file private</li>
+      <li><code>extern</code>: reference to variable defined elsewhere</li>
+      <li><code>register</code>: hint for register — mostly obsolete</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Type Qualifiers</div>
+    <ul>
+      <li><code>const</code>: variable must not be modified</li>
+      <li><code>volatile</code>: may change outside program control</li>
+      <li>volatile: critical for hardware registers and signals</li>
+      <li><code>restrict</code> C99: pointer has no alias — optimization hint</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">const Pointer Combinations</div>
+    <ul>
+      <li><code>const int *p</code>: p points to const int — p movable</li>
+      <li><code>int * const p</code>: p itself is const — p fixed</li>
+      <li><code>const int * const p</code>: both pointer and target const</li>
+      <li><code>const char *str</code>: function won't modify string</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Complex Declarations — Right-Left Rule</div>
+    <ul>
+      <li><code>int *a[10]</code>: array of 10 pointers to int</li>
+      <li><code>int (*a)[10]</code>: pointer to array of 10 ints</li>
+      <li><code>int *f(void)</code>: function returning int pointer</li>
+      <li><code>int (*f)(void)</code>: pointer to function returning int</li>
+      <li><code>int (*a[10])(int)</code>: array of 10 function pointers</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Initializers</div>
+    <ul>
+      <li>Variables: initialized once at declaration</li>
+      <li>static/extern: initialized to zero if no initializer</li>
+      <li>auto: uninitialized by default — garbage value</li>
+      <li>C99: can initialize with non-constant expressions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Declaration Traps</div>
+    <ul>
+      <li><code>int* a, b</code>: b is int not pointer — use <code>int *a, *b</code></li>
+      <li><code>const char *s</code> vs <code>char *const s</code>: completely different</li>
+      <li>extern without matching definition: linker error</li>
+      <li>Uninitialized auto: reading it is UB</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH19 -->
+<div class="chapter-block" id="ch19">
+  <div class="chapter-header"><span class="ch-num">CH 19</span><h2>Program Design</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Modular Design</div>
+    <ul>
+      <li>Module: a .c file paired with .h interface</li>
+      <li>Goal: high cohesion — related things together</li>
+      <li>Goal: low coupling — modules independent</li>
+      <li>Interface: what the module provides (in .h)</li>
+      <li>Implementation: how it works (in .c)</li>
+      <li>Information hiding: .c details invisible to callers</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Abstract Data Types</div>
+    <ul>
+      <li>ADT: data + operations on it, implementation hidden</li>
+      <li>Client: uses ADT via interface only</li>
+      <li>Implementation: can change without affecting client</li>
+      <li>Stack ADT example: push/pop/is_empty — no internals exposed</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Types of Modules</div>
+    <ul>
+      <li>Data pool: constants/variables (e.g. &lt;float.h&gt;)</li>
+      <li>Library: collection of related functions (e.g. &lt;string.h&gt;)</li>
+      <li>Abstract object: encapsulates single hidden object</li>
+      <li>ADT: type + operations</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Design Principles</div>
+    <ul>
+      <li>Top-down: divide problem → sub-problems recursively</li>
+      <li>Bottom-up: build primitives → compose upward</li>
+      <li>Cohesion: elements of module work toward one goal</li>
+      <li>Coupling: minimize dependencies between modules</li>
+      <li>Reusability: design modules for use in other programs</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Design Traps</div>
+    <ul>
+      <li>Global variables: destroys encapsulation</li>
+      <li>Fat interfaces: expose implementation details</li>
+      <li>Tight coupling: changes cascade through program</li>
+      <li>No documentation: undocumented interfaces rot quickly</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH20 -->
+<div class="chapter-block" id="ch20">
+  <div class="chapter-header"><span class="ch-num">CH 20</span><h2>Low-Level Programming</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Bitwise Operators — Six Total</div>
+    <ul>
+      <li><code>~i</code>: bitwise complement — flip every bit</li>
+      <li><code>i &amp; j</code>: bitwise AND — 1 only if both bits 1</li>
+      <li><code>i | j</code>: bitwise OR — 1 if either bit 1</li>
+      <li><code>i ^ j</code>: bitwise XOR — 1 if bits differ</li>
+      <li><code>i &lt;&lt; j</code>: left shift i by j positions</li>
+      <li><code>i &gt;&gt; j</code>: right shift i by j positions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Shift Semantics</div>
+    <ul>
+      <li>i &lt;&lt; j: equivalent to i × 2^j for unsigned</li>
+      <li>i &gt;&gt; j: equivalent to i ÷ 2^j for unsigned</li>
+      <li>Right shift signed: implementation-defined in C89</li>
+      <li>Portability rule: shift only unsigned operands</li>
+      <li>Shift by ≥ bit-width: undefined behavior</li>
+      <li>Negative shift amount: undefined behavior</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Bit Manipulation Idioms</div>
+    <ul>
+      <li>SET bit k: <code>i |= (1 &lt;&lt; k)</code></li>
+      <li>CLEAR bit k: <code>i &amp;= ~(1 &lt;&lt; k)</code></li>
+      <li>TEST bit k: <code>(i &gt;&gt; k) &amp; 1</code> or <code>i &amp; (1 &lt;&lt; k)</code></li>
+      <li>TOGGLE bit k: <code>i ^= (1 &lt;&lt; k)</code></li>
+      <li>MASK low 4 bits: <code>i &amp; 0x0F</code></li>
+      <li>EXTRACT bits 4-7: <code>(i &gt;&gt; 4) &amp; 0x0F</code></li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Bit-Fields in Structs</div>
+    <ul>
+      <li><code>struct { unsigned int flag : 1; unsigned int val : 4; }</code></li>
+      <li>flag : 1: field occupies exactly 1 bit</li>
+      <li>Order: implementation-defined (not portable)</li>
+      <li>Cannot take address of bit-field with &amp;</li>
+      <li>Use: compact storage for flags and small values</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Low-Level Techniques</div>
+    <ul>
+      <li>volatile: mark hardware registers, signal handlers</li>
+      <li>Union reinterpret: reading one member after writing another</li>
+      <li>Little-endian vs big-endian: byte order varies by CPU</li>
+      <li><code>typedef unsigned char Byte</code>: portable byte type</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Bitwise Traps</div>
+    <ul>
+      <li>&amp; vs &amp;&amp;: bitwise AND vs logical AND — very different</li>
+      <li>i &lt;&lt; 32 for 32-bit int: undefined behavior</li>
+      <li>Right shift negative signed: impl-defined in C89</li>
+      <li><code>i &amp; 0xFF == 0</code>: parsed as <code>i &amp; (0xFF == 0)</code> not <code>(i &amp; 0xFF) == 0</code></li>
+      <li>Bit-field layout: never assume portably</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end grid advanced -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-group-title" style="margin-top:24px">Standard Library &amp; I/O — Ch 21–27</div>
+<div class="grid">
+
+<!-- CH21 -->
+<div class="chapter-block" id="ch21">
+  <div class="chapter-header"><span class="ch-num">CH 21</span><h2>The Standard Library</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">C89 Library — 15 Headers</div>
+    <ul>
+      <li><code>&lt;assert.h&gt;</code> assert macro for debugging</li>
+      <li><code>&lt;ctype.h&gt;</code> char classification/conversion</li>
+      <li><code>&lt;errno.h&gt;</code> errno error codes</li>
+      <li><code>&lt;float.h&gt;</code> float type characteristics</li>
+      <li><code>&lt;limits.h&gt;</code> integer type limits</li>
+      <li><code>&lt;locale.h&gt;</code> localization support</li>
+      <li><code>&lt;math.h&gt;</code> mathematical functions</li>
+      <li><code>&lt;setjmp.h&gt;</code> non-local jump setjmp/longjmp</li>
+      <li><code>&lt;signal.h&gt;</code> signal handling</li>
+      <li><code>&lt;stdarg.h&gt;</code> variable argument lists</li>
+      <li><code>&lt;stddef.h&gt;</code> NULL, size_t, ptrdiff_t</li>
+      <li><code>&lt;stdio.h&gt;</code> I/O functions</li>
+      <li><code>&lt;stdlib.h&gt;</code> general utilities</li>
+      <li><code>&lt;string.h&gt;</code> string functions</li>
+      <li><code>&lt;time.h&gt;</code> date and time functions</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">C99 Additional Headers — 9 More</div>
+    <ul>
+      <li><code>&lt;complex.h&gt;</code> complex number arithmetic</li>
+      <li><code>&lt;fenv.h&gt;</code> floating-point environment</li>
+      <li><code>&lt;inttypes.h&gt;</code> integer format macros</li>
+      <li><code>&lt;iso646.h&gt;</code> alternative operator spellings</li>
+      <li><code>&lt;stdbool.h&gt;</code> bool/true/false types</li>
+      <li><code>&lt;stdint.h&gt;</code> exact-width integer types</li>
+      <li><code>&lt;tgmath.h&gt;</code> type-generic math macros</li>
+      <li><code>&lt;wchar.h&gt;</code> wide character I/O</li>
+      <li><code>&lt;wctype.h&gt;</code> wide character classification</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Library Usage Rules</div>
+    <ul>
+      <li>Always #include relevant header before using</li>
+      <li>Library may implement functions as macros</li>
+      <li>Macro can evaluate args more than once: beware side effects</li>
+      <li><code>#undef name</code> then call: forces function not macro</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stddef.h&gt; Key Types</div>
+    <ul>
+      <li><code>NULL</code>: null pointer constant</li>
+      <li><code>size_t</code>: unsigned type for sizeof results</li>
+      <li><code>ptrdiff_t</code>: signed type for pointer differences</li>
+      <li><code>offsetof(type, member)</code>: byte offset of struct member</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdbool.h&gt; (C99)</div>
+    <ul>
+      <li><code>bool</code>: macro expanding to _Bool</li>
+      <li><code>true</code>: macro expanding to 1</li>
+      <li><code>false</code>: macro expanding to 0</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH22 -->
+<div class="chapter-block" id="ch22">
+  <div class="chapter-header"><span class="ch-num">CH 22</span><h2>Input/Output</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Streams &amp; FILE</div>
+    <ul>
+      <li>Stream: sequence of characters — abstract I/O</li>
+      <li>FILE: opaque type representing open stream</li>
+      <li>stdin / stdout / stderr: three standard streams</li>
+      <li>Text file: divided into lines, may have EOF marker</li>
+      <li>Binary file: bytes not divided into lines</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Opening &amp; Closing Files</div>
+    <ul>
+      <li><code>FILE *fp = fopen("name", "r")</code>: open for read</li>
+      <li>"r": read text; "w": write text (truncate)</li>
+      <li>"a": append text; "r+": read/write</li>
+      <li>"rb": read binary; "wb": write binary</li>
+      <li>fopen returns NULL on failure — always check</li>
+      <li><code>int fclose(fp)</code>: close file; returns EOF on error</li>
+      <li><code>freopen(name, mode, stream)</code>: reopen existing stream</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Character &amp; Line File I/O</div>
+    <ul>
+      <li><code>int getc(FILE *fp)</code>: read one char (may be macro)</li>
+      <li><code>int fgetc(FILE *fp)</code>: read one char (always function)</li>
+      <li><code>int getchar(void)</code>: read from stdin</li>
+      <li><code>int putc/fputc/putchar</code>: write one char</li>
+      <li><code>int ungetc(int c, fp)</code>: push char back to stream</li>
+      <li>EOF: special int value — not a char; store in int</li>
+      <li>Pattern: <code>while ((ch = getc(fp)) != EOF) { ... }</code></li>
+      <li><code>char *fgets(s, n, fp)</code>: read line max n-1 chars</li>
+      <li><code>int fputs(s, fp)</code>: write string no newline</li>
+      <li><code>gets(s)</code>: DANGEROUS — no bounds — never use</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">Block I/O &amp; Positioning</div>
+    <ul>
+      <li><code>fread(ptr, size, n, fp)</code>: read n items of size bytes</li>
+      <li><code>fwrite(ptr, size, n, fp)</code>: write n items</li>
+      <li><code>fseek(fp, offset, whence)</code>: move file position</li>
+      <li>SEEK_SET / SEEK_CUR / SEEK_END</li>
+      <li><code>ftell(fp)</code>: returns current file position</li>
+      <li><code>rewind(fp)</code>: move to start of file</li>
+      <li><code>fgetpos/fsetpos</code>: for large files (&gt;2GB)</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">String I/O &amp; Error Detection</div>
+    <ul>
+      <li><code>sprintf(s, fmt, ...)</code>: printf to string buffer</li>
+      <li><code>snprintf(s, n, fmt, ...)</code>: safe — max n-1 chars (C99)</li>
+      <li><code>sscanf(s, fmt, ...)</code>: scanf from string</li>
+      <li><code>feof(fp)</code>: true if end-of-file reached</li>
+      <li><code>ferror(fp)</code>: true if error occurred</li>
+      <li><code>clearerr(fp)</code>: clear EOF and error flags</li>
+      <li><code>perror(s)</code>: print s + system error message</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">I/O Traps</div>
+    <ul>
+      <li>EOF stored in char: sign extension loses it — use int</li>
+      <li>fgets includes \n: check and strip if needed</li>
+      <li>Binary files: never use text mode</li>
+      <li>Not checking fopen return: NULL dereference crash</li>
+      <li>Not closing files: buffer not flushed</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH23 -->
+<div class="chapter-block" id="ch23">
+  <div class="chapter-header"><span class="ch-num">CH 23</span><h2>Library: Numbers &amp; Characters</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;float.h&gt; Key Macros</div>
+    <ul>
+      <li><code>FLT_DIG</code>: significant decimal digits in float (6)</li>
+      <li><code>DBL_DIG</code>: significant decimal digits in double (15)</li>
+      <li><code>FLT_MAX</code> / <code>DBL_MAX</code>: max positive values</li>
+      <li><code>FLT_MIN</code>: min positive normalized float</li>
+      <li><code>FLT_EPSILON</code>: smallest x where 1.0+x ≠ 1.0</li>
+      <li><code>FLT_ROUNDS</code>: rounding direction macro</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;limits.h&gt; Key Macros</div>
+    <ul>
+      <li><code>CHAR_BIT</code>: bits in char (usually 8)</li>
+      <li><code>INT_MAX</code> / <code>INT_MIN</code>: max/min int value</li>
+      <li><code>UINT_MAX</code>: maximum unsigned int</li>
+      <li><code>LONG_MAX</code> / <code>LONG_MIN</code>: long limits</li>
+      <li><code>LLONG_MAX</code>: C99 long long max</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;math.h&gt; C89 Functions</div>
+    <ul>
+      <li><code>sin/cos/tan(x)</code>: trig functions (radians)</li>
+      <li><code>asin/acos/atan(x)</code>: inverse trig</li>
+      <li><code>atan2(y,x)</code>: angle from x-axis to point (y,x)</li>
+      <li><code>exp(x)</code>: e^x &nbsp;<code>log(x)</code>: natural log &nbsp;<code>log10(x)</code>: base-10</li>
+      <li><code>pow(x,y)</code>: x^y &nbsp;<code>sqrt(x)</code>: square root</li>
+      <li><code>ceil(x)</code>: round up &nbsp;<code>floor(x)</code>: round down</li>
+      <li><code>fabs(x)</code>: absolute value &nbsp;<code>fmod(x,y)</code>: fp remainder</li>
+      <li><code>modf(x,*ip)</code>: split integer and fraction</li>
+      <li><code>HUGE_VAL</code>: returned on overflow</li>
+      <li>Domain error → errno = EDOM; Range → ERANGE</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;math.h&gt; C99 Additions</div>
+    <ul>
+      <li>float/long double variants: sinf, sinl, etc.</li>
+      <li><code>round(x)</code>: round to nearest integer</li>
+      <li><code>trunc(x)</code>: truncate toward zero</li>
+      <li><code>cbrt(x)</code>: cube root &nbsp;<code>hypot(x,y)</code>: √(x²+y²)</li>
+      <li><code>log2(x)</code>: base-2 logarithm</li>
+      <li><code>isnan(x)</code> <code>isinf(x)</code> <code>isfinite(x)</code>: classification</li>
+      <li><code>copysign(x,y)</code>: x with sign of y</li>
+      <li><code>nan("str")</code>: construct NaN</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;ctype.h&gt; Classification &amp; Conversion</div>
+    <ul>
+      <li><code>isalpha(c)</code> <code>isdigit(c)</code> <code>isalnum(c)</code></li>
+      <li><code>isupper(c)</code> <code>islower(c)</code> <code>isspace(c)</code></li>
+      <li><code>ispunct(c)</code> <code>iscntrl(c)</code> <code>isxdigit(c)</code></li>
+      <li><code>isprint(c)</code> <code>isgraph(c)</code>: printable checks</li>
+      <li><code>toupper(c)</code> <code>tolower(c)</code>: returns int — not char</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Math/Char Traps</div>
+    <ul>
+      <li>ctype functions: pass int not char directly</li>
+      <li>Pass negative char: UB — cast to unsigned char first</li>
+      <li>sqrt(-1): domain error → errno = EDOM</li>
+      <li>log(0): range error → returns -HUGE_VAL</li>
+      <li>pow(0,-1): domain error</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH24 -->
+<div class="chapter-block" id="ch24">
+  <div class="chapter-header"><span class="ch-num">CH 24</span><h2>Error Handling</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;assert.h&gt; — Assert Macro</div>
+    <ul>
+      <li><code>assert(expr)</code>: if false → print msg and abort</li>
+      <li><code>assert(ptr != NULL)</code>: validate pointer before use</li>
+      <li><code>#define NDEBUG</code>: disables all assert macros</li>
+      <li>Disable pattern: <code>#define NDEBUG</code> then <code>#include &lt;assert.h&gt;</code></li>
+      <li>WARNING: never put side effects inside assert</li>
+      <li><code>assert(p = malloc(n)) != NULL</code>: WRONG — disabled!</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;errno.h&gt; — Error Codes</div>
+    <ul>
+      <li>errno: int variable set by library functions on error</li>
+      <li>errno = 0 before call: clear before checking</li>
+      <li>Check errno after suspect function call</li>
+      <li>EDOM: domain error (math arg out of range)</li>
+      <li>ERANGE: range error (result too large)</li>
+      <li><code>perror("msg")</code>: print msg: errno description</li>
+      <li><code>strerror(errno)</code>: return string for errno code</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;signal.h&gt; — Signal Handling</div>
+    <ul>
+      <li><code>signal(SIGINT, handler)</code>: register signal handler</li>
+      <li><code>raise(sig)</code>: send signal to current process</li>
+      <li>SIGABRT / SIGFPE / SIGILL / SIGINT / SIGSEGV / SIGTERM</li>
+      <li>SIG_DFL: default action; SIG_IGN: ignore signal</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;setjmp.h&gt; — Non-Local Jumps</div>
+    <ul>
+      <li><code>setjmp(env)</code>: save execution state; returns 0</li>
+      <li><code>longjmp(env, val)</code>: restore state; setjmp returns val</li>
+      <li>Use: error recovery across function call chain</li>
+      <li>jmp_buf: type to hold saved state</li>
+      <li>Dangerous: skips destructors, local cleanup</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Error Handling Traps</div>
+    <ul>
+      <li>Never rely on errno without setting = 0 first</li>
+      <li>assert disabled in production: NDEBUG defined</li>
+      <li>Side effects in assert: vanish when disabled</li>
+      <li>longjmp past variable declaration: UB</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH25 -->
+<div class="chapter-block" id="ch25">
+  <div class="chapter-header"><span class="ch-num">CH 25</span><h2>International Features</h2></div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Localization Overview</div>
+    <ul>
+      <li>Locale: language/cultural conventions bundle</li>
+      <li>"C" locale: default minimal portable locale</li>
+      <li>setlocale: change locale at runtime</li>
+      <li>Affects: numeric formats, collation, char class</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;locale.h&gt;</div>
+    <ul>
+      <li><code>setlocale(LC_ALL, "en_US")</code>: set all categories</li>
+      <li><code>setlocale(LC_NUMERIC, "")</code>: use system default</li>
+      <li><code>localeconv()</code>: returns struct lconv with locale info</li>
+      <li>LC_COLLATE / LC_CTYPE / LC_MONETARY / LC_NUMERIC / LC_TIME</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Wide Characters</div>
+    <ul>
+      <li><code>wchar_t</code>: wide character type — for large char sets</li>
+      <li><code>L'a'</code>: wide character literal &nbsp;<code>L"hello"</code>: wide string</li>
+      <li>Handles: Chinese, Japanese, Unicode characters</li>
+      <li><code>&lt;wchar.h&gt;</code>: wide character I/O and string functions</li>
+      <li><code>&lt;wctype.h&gt;</code>: wide character classification</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Multibyte Characters</div>
+    <ul>
+      <li>Multibyte: variable-length encoding (e.g. UTF-8)</li>
+      <li><code>mblen(s, n)</code>: bytes in next multibyte char</li>
+      <li><code>mbtowc(pwc, s, n)</code>: convert multibyte to wide</li>
+      <li><code>wctomb(s, wc)</code>: convert wide to multibyte</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-concept">Concept</span>
+    <div class="section-title">Digraphs, Trigraphs &amp; UCNs (C99)</div>
+    <ul>
+      <li>Trigraphs: ??= → # &nbsp;??( → [ &nbsp;??&lt; → { etc.</li>
+      <li>Digraphs C99: &lt;: → [ &nbsp;:&gt; → ] &nbsp;&lt;% → { &nbsp;%&gt; → }</li>
+      <li>Purpose: keyboards lacking [ ] { } # characters</li>
+      <li>\uXXXX: Unicode character in source code (C99)</li>
+      <li>\UXXXXXXXX: Unicode character (8-digit form) (C99)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH26 -->
+<div class="chapter-block" id="ch26">
+  <div class="chapter-header"><span class="ch-num">CH 26</span><h2>Miscellaneous Library Functions</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdarg.h&gt; — Variable Arguments</div>
+    <ul>
+      <li><code>va_list ap</code>: argument list object</li>
+      <li><code>va_start(ap, last)</code>: initialize ap; last = last named param</li>
+      <li><code>va_arg(ap, type)</code>: fetch next arg of given type</li>
+      <li><code>va_end(ap)</code>: clean up — REQUIRED before return</li>
+      <li><code>va_copy(dst, src)</code>: copy va_list (C99)</li>
+      <li>Pattern: <code>int sum(int n, ...) { va_list ap; va_start(ap,n); ...}</code></li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdlib.h&gt; String Conversion</div>
+    <ul>
+      <li><code>atoi(s)</code>: string to int (no error check)</li>
+      <li><code>atof(s)</code>: string to double (no error check)</li>
+      <li><code>atol(s)</code>: string to long</li>
+      <li><code>strtol(s, &amp;end, base)</code>: string to long with error check</li>
+      <li><code>strtoul(s, &amp;end, base)</code>: string to unsigned long</li>
+      <li><code>strtod(s, &amp;end)</code>: string to double with error check</li>
+      <li>Prefer strtol/strtod: they set errno on error</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdlib.h&gt; Math &amp; Program Control</div>
+    <ul>
+      <li><code>abs(n)</code>: absolute value of int &nbsp;<code>labs(n)</code>: long &nbsp;<code>llabs(n)</code>: long long (C99)</li>
+      <li><code>div(n,d)</code>: returns div_t {quot, rem} &nbsp;<code>ldiv(n,d)</code>: long version</li>
+      <li><code>exit(status)</code>: terminate program normally</li>
+      <li>EXIT_SUCCESS and EXIT_FAILURE: portable status codes</li>
+      <li><code>abort()</code>: terminate abnormally; SIGABRT raised</li>
+      <li><code>atexit(func)</code>: register function called at exit</li>
+      <li><code>_Exit(status)</code> C99: exit without cleanup</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdlib.h&gt; Searching &amp; Sorting</div>
+    <ul>
+      <li><code>qsort(base, n, size, cmp)</code>: sort array in-place</li>
+      <li><code>bsearch(key, base, n, size, cmp)</code>: binary search sorted array</li>
+      <li>cmp signature: <code>int cmp(const void*, const void*)</code></li>
+      <li>cmp returns: negative/zero/positive</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdlib.h&gt; Other &amp; &lt;time.h&gt;</div>
+    <ul>
+      <li><code>rand()</code>: pseudo-random int 0 to RAND_MAX</li>
+      <li><code>srand(seed)</code>: seed RNG &nbsp;<code>srand(time(NULL))</code>: typical</li>
+      <li><code>getenv("PATH")</code>: get environment variable string</li>
+      <li><code>system("cmd")</code>: run OS command</li>
+      <li><code>time_t</code>: arithmetic type for calendar time</li>
+      <li><code>time(NULL)</code>: current time as time_t</li>
+      <li><code>clock()</code>: processor time &nbsp;<code>CLOCKS_PER_SEC</code></li>
+      <li><code>difftime(t2, t1)</code>: difference in seconds as double</li>
+      <li><code>struct tm</code>: broken-down time structure</li>
+      <li><code>localtime(&amp;t)</code> / <code>gmtime(&amp;t)</code>: convert time_t to struct tm</li>
+      <li><code>mktime(&amp;tm)</code>: convert struct tm to time_t</li>
+      <li><code>strftime(s, n, fmt, &amp;tm)</code>: format time to string</li>
+      <li><code>asctime(&amp;tm)</code> <code>ctime(&amp;t)</code>: convert to string</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Misc Library Traps</div>
+    <ul>
+      <li>atoi no error check: invalid string returns 0 silently</li>
+      <li>rand() not cryptographically secure</li>
+      <li>va_arg wrong type: undefined behavior</li>
+      <li>va_end missing: UB on some implementations</li>
+      <li>atexit order: called in reverse registration order</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CH27 -->
+<div class="chapter-block" id="ch27">
+  <div class="chapter-header"><span class="ch-num">CH 27</span><h2>Additional C99 Math Support</h2></div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;stdint.h&gt; C99 — Exact-Width Integer Types</div>
+    <ul>
+      <li><code>int8_t / uint8_t</code>: exact 8-bit signed/unsigned</li>
+      <li><code>int16_t / uint16_t</code>: exact 16-bit</li>
+      <li><code>int32_t / uint32_t</code>: exact 32-bit</li>
+      <li><code>int64_t / uint64_t</code>: exact 64-bit</li>
+      <li><code>int_least8_t</code>: at least 8 bits signed</li>
+      <li><code>int_fast8_t</code>: fastest type of at least 8 bits</li>
+      <li><code>intmax_t / uintmax_t</code>: widest available type</li>
+      <li><code>intptr_t / uintptr_t</code>: integer wide enough for pointer</li>
+      <li>WHY: int size varies by platform — stdint fixes it</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;inttypes.h&gt; C99 — Format Macros</div>
+    <ul>
+      <li><code>PRId32</code>: printf format for int32_t → "d" or "ld"</li>
+      <li><code>PRIu64</code>: printf format for uint64_t</li>
+      <li><code>SCNd32</code>: scanf format for int32_t</li>
+      <li>Usage: <code>printf("%" PRId32 "\n", val32)</code></li>
+      <li>WHY: size-dependent format specifiers otherwise needed</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;complex.h&gt; C99 — Complex Numbers</div>
+    <ul>
+      <li><code>double complex z</code>: declares complex double</li>
+      <li><code>float complex zf</code>: complex float</li>
+      <li><code>I</code>: imaginary unit √(-1)</li>
+      <li><code>z = 3.0 + 4.0*I</code>: complex constant</li>
+      <li><code>creal(z)</code>: real part &nbsp;<code>cimag(z)</code>: imaginary part</li>
+      <li><code>cabs(z)</code>: magnitude &nbsp;<code>carg(z)</code>: argument/angle</li>
+      <li><code>cexp/clog/csin/ccos</code>: complex math functions</li>
+      <li><code>conj(z)</code>: complex conjugate</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-syntax">Syntax</span>
+    <div class="section-title">&lt;tgmath.h&gt; &amp; &lt;fenv.h&gt; C99</div>
+    <ul>
+      <li>tgmath.h: macros selecting right function by type</li>
+      <li>sin(x): calls sinf/sin/sinl based on x type</li>
+      <li>FE_DIVBYZERO / FE_INVALID / FE_OVERFLOW / FE_UNDERFLOW / FE_INEXACT</li>
+      <li><code>feclearexcept(FE_ALL_EXCEPT)</code>: clear all flags</li>
+      <li><code>fetestexcept(excepts)</code>: test which flags are set</li>
+      <li><code>fegetround() / fesetround()</code>: get/set rounding mode</li>
+      <li>FE_TONEAREST / FE_UPWARD / FE_DOWNWARD / FE_TOWARDZERO</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">C99 Math Traps</div>
+    <ul>
+      <li>Mixing stdint.h types with wrong printf format: UB</li>
+      <li>Always use &lt;inttypes.h&gt; macros for stdint printing</li>
+      <li>Complex arithmetic: not available in C89</li>
+      <li>fenv.h: floating-point exceptions are not C exceptions</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end grid stdlib -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-group-title" style="margin-top:24px">Master References</div>
+<div class="grid">
+
+<!-- PRECEDENCE -->
+<div class="chapter-block master-ref master-ref-keyword" id="ref-prec">
+  <div class="chapter-header"><span class="ch-num">REF</span><h2>Operator Precedence — Complete 15-Level Table</h2></div>
+  <div class="section">
+    <span class="section-label label-keyword">Reference</span>
+    <div class="section-title">High → Low</div>
+    <ul>
+      <li>1 HIGHEST: <code>() [] -&gt; .</code> (postfix <code>++ --</code>)</li>
+      <li>2: prefix <code>++ --</code> ; unary <code>+ - ~ !</code> ; <code>* &amp;</code> ; sizeof ; cast (type)</li>
+      <li>3: <code>* / %</code></li>
+      <li>4: binary <code>+ -</code></li>
+      <li>5: <code>&lt;&lt; &gt;&gt;</code></li>
+      <li>6: <code>&lt; &lt;= &gt; &gt;=</code></li>
+      <li>7: <code>== !=</code></li>
+      <li>8: <code>&amp;</code> bitwise AND</li>
+      <li>9: <code>^</code> bitwise XOR</li>
+      <li>10: <code>|</code> bitwise OR</li>
+      <li>11: <code>&amp;&amp;</code> logical AND</li>
+      <li>12: <code>||</code> logical OR</li>
+      <li>13: <code>? :</code> ternary</li>
+      <li>14: <code>= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= ^= |=</code></li>
+      <li>15 LOWEST: <code>,</code> comma</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Precedence Traps — Must Memorize</div>
+    <ul>
+      <li><code>*p++</code>: post-increment p not *p</li>
+      <li><code>i &amp; 0xFF == 0</code>: parsed as <code>i &amp; (0xFF==0)</code></li>
+      <li><code>i &lt;&lt; 2 + 1</code>: parsed as <code>i &lt;&lt; (2+1)</code></li>
+      <li><code>!x &amp; 0x01</code>: parsed as <code>(!x) &amp; 0x01</code></li>
+      <li><code>a ? b : c = d</code>: parsed as <code>a ? b : (c=d)</code></li>
+    </ul>
+  </div>
+</div>
+
+<!-- UB CATALOG -->
+<div class="chapter-block master-ref" id="ref-ub">
+  <div class="chapter-header"><span class="ch-num">REF</span><h2>Undefined Behavior — Know These Cold</h2></div>
+  <div class="section">
+    <span class="section-label label-pitfall">Pitfall</span>
+    <div class="section-title">Complete UB List from King</div>
+    <ul>
+      <li>Signed integer overflow: INT_MAX + 1</li>
+      <li>Division by zero: i/0 or i%0</li>
+      <li>Out-of-bounds array access: a[N] for a[N]</li>
+      <li>Use after free: accessing freed memory</li>
+      <li>Uninitialized auto variable: reading it</li>
+      <li>Null pointer dereference: *NULL</li>
+      <li>Shift by negative amount: i &gt;&gt; -1</li>
+      <li>Shift by ≥ bit-width: i &lt;&lt; 32 for 32-bit int</li>
+      <li>Modifying string literal: <code>char *p="hi"; p[0]='X'</code></li>
+      <li>Multiple unsequenced side effects: <code>a[i] = i++</code></li>
+      <li>Modifying object between sequence points twice</li>
+      <li>Aliasing violation: int* and float* to same memory</li>
+      <li>Function called without matching prototype</li>
+      <li>Calling free() twice on same pointer</li>
+      <li>va_arg wrong type: va_arg(ap, int) for double arg</li>
+      <li>Returning address of local variable</li>
+      <li>Signed right shift of negative: C89 impl-defined</li>
+    </ul>
+  </div>
+</div>
+
+<!-- C89 vs C99 -->
+<div class="chapter-block master-ref-keyword" id="ref-diff">
+  <div class="chapter-header"><span class="ch-num">REF</span><h2>C89 vs C99 Quick Diff</h2></div>
+  <div class="section">
+    <span class="section-label label-keyword">C99</span>
+    <div class="section-title">C99 New Features</div>
+    <ul>
+      <li><code>//</code> comments: C++-style line comments</li>
+      <li>Declare anywhere: not just block start</li>
+      <li>VLA: variable-length arrays</li>
+      <li><code>_Bool</code>: boolean type</li>
+      <li><code>long long</code>: 64-bit integer type</li>
+      <li>Designated initializers: <code>.field = val</code></li>
+      <li>Compound literals: <code>(int[]){1,2,3}</code></li>
+      <li>Flexible array members in structs</li>
+      <li>C99 division: always truncates toward zero</li>
+      <li><code>__func__</code>: current function name predefined macro</li>
+      <li><code>inline</code> functions: optimization hint</li>
+      <li><code>restrict</code> qualifier: no-alias pointer hint</li>
+      <li>stdint.h / inttypes.h / stdbool.h added</li>
+      <li>complex.h / tgmath.h / fenv.h added</li>
+      <li><code>snprintf</code>: safe sprintf with length limit</li>
+    </ul>
+  </div>
+  <div class="section">
+    <span class="section-label label-pitfall">C89</span>
+    <div class="section-title">C89 Restrictions to Know</div>
+    <ul>
+      <li>Declarations: must come before first statement in block</li>
+      <li>No // comments: use /* ... */ only</li>
+      <li>No _Bool: use int with 0/1 convention</li>
+      <li>No VLA: all array sizes compile-time constant</li>
+      <li>Division -9/7: implementation-defined truncation</li>
+      <li>No designated initializers</li>
+      <li>No long long type</li>
+      <li>No inline keyword</li>
+      <li>implicit int return from functions: allowed but dangerous</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end grid master refs -->
+</div><!-- end container -->
+</body>
+</html>
