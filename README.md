@@ -1,0 +1,2 @@
+
+This repository tracks my continuous progress through "C Programming: A Modern Approach" (2nd Edition) by K. N. King. It serves as an active log of my growth, containing my personal solutions to the book's exercises and programming projects. I am coding my way through the book chapter by chapter, consistently moving forward to master core C concepts, data structures, and low-level logic. The repository updates dynamically as I advance to new chapters and tackle more complex programming challenges.
