@@ -58,4 +58,4 @@ even when the logic technically works.
 
 - Language: C (C99)
 - Compiler: GCC
-- OS: [Linux / Windows — fill this in]
+- OS: [Linux]
