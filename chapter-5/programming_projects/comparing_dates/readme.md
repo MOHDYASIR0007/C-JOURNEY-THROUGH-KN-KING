@@ -7,8 +7,8 @@ date is earlier or reports that they're the same.
 ## What changed from the previous version
 
 - Rejects `dd > 30` for April, June, September, November.
-- Rejects Feb 29+ in a non-leap year (`yy % 4 != 0`).
-- Rejects Feb 30+ in a leap year (`yy % 4 == 0`).
+- Rejects Feb 28+ in a non-leap year (`yy % 4 != 0`).
+- Rejects Feb 29+ in a leap year (`yy % 4 == 0`).
 - All other range/comparison logic is unchanged.
 
 ## Century leap-year assumption: resolved by assuming `yy` means 2000+yy
