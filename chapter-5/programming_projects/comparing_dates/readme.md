@@ -50,7 +50,7 @@ Your command as written mixes syntax:
 
 ```
 gcc filename.c -o directoryname
-.\filename
+./filename
 ```
 
 `gcc source.c -o output` is correct — but `-o directoryname` names the
@@ -131,7 +131,7 @@ Output:
 ```
 `00` is treated as a leap year purely because `00 % 4 == 0`. Whether `00`
 represents 1900 (not a leap year) or 2000 (a leap year) is unknowable from
-a 2-digit year, so this program cannot get it right as currently designed.
+a 2-digit year as the author did'nt mentioned clearly, so this program cannot get it right as currently designed and assumes that the year entered as  2-digit is >=2000 .
 
 ### Ordinary comparison still works
 ```
