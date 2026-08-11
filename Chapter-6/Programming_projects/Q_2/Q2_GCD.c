@@ -1,5 +1,7 @@
 //Q_2 SOLUTION...
 
+//Q_2 SOLUTION...
+
 #include <stdio.h>
 
 int main()
@@ -7,25 +9,28 @@ int main()
   int m, n, gcd, remainder;
 
   printf("Enter two integrs: ");
-  scanf("%d%d", &m, &n);s
+  scanf("%d%d", &m, &n);
 
  
-    while (n != 0) {
+    for (;;) {
       
-        remainder = m % n;
-
-        if (remainder == 0) {
-          printf("Greastest common divisor: %d\n", n); break;
+        if (n == 0) {
+          gcd = m;
+          printf("Greastest common divisor: %d\n", m);
+          break;
         }
-
+      
         else {
-          m = n;
-          n = remainder;}
 
-          if (m % n == 0) {
-            printf("Greastest common divisor: %d\n", n); break;}     
-        
-    }
+          remainder = m % n;
+          m = n;
+          n = remainder;
+        } 
+
+          
+        }
+      
      return 0;
   }
+    
     
