@@ -29,17 +29,19 @@ The commission rate depends on the total trade value according to the following 
 ---
 
 
-How to Compile & Run
+## How to Compile & Run
 
-Using GCC Compiler
-Compile:
+  Using GCC Compiler
+  Compile:
 
-Bash
+```Bash
 gcc loop_broker.c -o loop_broker
+```
 Execute:
 
-Bash
+```Bash
 ./loop_broker
+```
 
 
 #### Detailed Case Analysis:
