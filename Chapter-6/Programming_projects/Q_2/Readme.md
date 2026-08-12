@@ -12,10 +12,11 @@ An efficient C program that computes the **Greatest Common Divisor (GCD)** of tw
 
 ##  How It Works (The Core Logic)
 The algorithm relies on the principle that the greatest common divisor of two numbers does not change if the larger number is replaced by its remainder when divided by the smaller number:
-
+```
 \[\text{GCD}(m, n) = \text{GCD}(n, m \pmod n)\]
-
+```
 Inside the loop, the program continuously computes the remainder:
+
 1. If the remainder becomes `0`, it breaks early because the current divisor `n` is the ultimate winner.
 2. If it is not `0`, it shifts the variables down the line (`m = n` and `n = remainder`) and performs a look-ahead optimization check before looping again.
 
