@@ -19,40 +19,6 @@ Inside the loop, the program continuously computes the remainder:
 1. If the remainder becomes `0`, it breaks early because the current divisor `n` is the ultimate winner.
 2. If it is not `0`, it shifts the variables down the line (`m = n` and `n = remainder`) and performs a look-ahead optimization check before looping again.
 
-##  Source Code (`Q2_GCD.c`)
-```c
-//Q_2 SOLUTION...
-
-#include <stdio.h>
-
-int main()
-{
-  int m, n, gcd, remainder;
-
-  printf("Enter two integrs: ");
-  scanf("%d%d", &m, &n);
-
-  while (n != 0) {
-      
-      remainder = m % n;
-
-      if (remainder == 0) {
-          printf("Greastest common divisor: %d\n", n); 
-          break;
-      }
-      else {
-          m = n;
-          n = remainder;
-      }
-
-      if (m % n == 0) {
-          printf("Greastest common divisor: %d\n", n); 
-          break;
-      }
-  } 
-  return 0;
-}
-```
 
 ##  How to Compile and Run
 
